@@ -38,7 +38,7 @@ class CounterCubit extends Cubit<int> {
   void onChange(Change<int> change) {
     // TODO: implement onChange
     super.onChange(change);
-    print(change);
+    // print(change);
     current = change.currentState;
     next = change.nextState;
   }
@@ -72,8 +72,20 @@ class _MainPageState extends State<MainPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Padding(padding: const EdgeInsets.all(20), child: Text('${mycounter.current}', style: const TextStyle(fontSize: 40),),),
-          BlocListener<CounterCubit, int>(
+          BlocConsumer<CounterCubit, int>(
             bloc: mycounter,
+            builder: (context, state) {
+              return Column(
+                children: [
+                  Center(
+                    child: Text(
+                      "$state",
+                      style: const TextStyle(fontSize: 50),
+                    ),
+                  ),
+                ],
+              );
+            },
             listener: ((context, state) {
               // print(state);
               ScaffoldMessenger.of(context)
@@ -86,30 +98,6 @@ class _MainPageState extends State<MainPage> {
                 return false;
               }
             },
-            child: BlocBuilder<CounterCubit, int>(
-              bloc: mycounter,
-              buildWhen: ((previous, current) {
-                if (current % 2 == 1) {
-                  return true;
-                } else {
-                  return false;
-                }
-              }),
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    Center(
-                      child: mycounter.current! < 5
-                          ? Text(
-                              "$state",
-                              style: const TextStyle(fontSize: 50),
-                            )
-                          : const Text("YOU WIN!"),
-                    ),
-                  ],
-                );
-              },
-            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
