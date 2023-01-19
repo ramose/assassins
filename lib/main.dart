@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'bloc/counter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,31 +17,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       home: MainPage(),
     );
-  }
-}
-
-class CounterCubit extends Cubit<int> {
-  CounterCubit({this.initialData = 20}) : super(initialData);
-
-  int initialData;
-  int? current = 0;
-  int? next = 0;
-
-  void tambahData() {
-    emit(state + 1);
-  }
-
-  void kurangData() {
-    emit(state - 1);
-  }
-
-  @override
-  void onChange(Change<int> change) {
-    // TODO: implement onChange
-    super.onChange(change);
-    // print(change);
-    current = change.currentState;
-    next = change.nextState;
   }
 }
 
