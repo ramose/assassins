@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,42 +72,60 @@ class _MainPageState extends State<MainPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // Padding(padding: const EdgeInsets.all(20), child: Text('${mycounter.current}', style: const TextStyle(fontSize: 40),),),
-          BlocBuilder(
+          BlocListener<CounterCubit, int>(
             bloc: mycounter,
-            buildWhen: ((previous, current) {
-              
+            listener: ((context, state) {
+              // print(state);
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(const SnackBar(content: Text("Dijalankan")));
             }),
-            builder: (context, state) {
-              return Column(
-                
-                children: [
-                  Center(
-                    child: mycounter.current! < 5
-                        ? Text(
-                            "$state",
-                            style: const TextStyle(fontSize: 50),
-                          )
-                        : Text("YOU WIN!"),
-                  ),
-                ],
-              );
+            listenWhen: (previous, current) {
+              if (current == 10) {
+                return true;
+              } else {
+                return false;
+              }
             },
+            child: BlocBuilder<CounterCubit, int>(
+              bloc: mycounter,
+              buildWhen: ((previous, current) {
+                if (current % 2 == 1) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }),
+              builder: (context, state) {
+                return Column(
+                  children: [
+                    Center(
+                      child: mycounter.current! < 5
+                          ? Text(
+                              "$state",
+                              style: const TextStyle(fontSize: 50),
+                            )
+                          : const Text("YOU WIN!"),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            mycounter.kurangData();
-                          },
-                          icon: const Icon(Icons.remove)),
-                      IconButton(
-                          onPressed: () {
-                            mycounter.tambahData();
-                          },
-                          icon: const Icon(Icons.add))
-                    ],
-                  )
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    mycounter.kurangData();
+                  },
+                  icon: const Icon(Icons.remove)),
+              IconButton(
+                  onPressed: () {
+                    mycounter.tambahData();
+                  },
+                  icon: const Icon(Icons.add))
+            ],
+          )
         ],
       ),
     );
